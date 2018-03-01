@@ -1,0 +1,331 @@
+-- MySQL dump 10.13  Distrib 5.5.53, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: pem_chat2
+-- ------------------------------------------------------
+-- Server version	5.5.53-0ubuntu0.14.04.1-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `admin_info_t`
+--
+
+DROP TABLE IF EXISTS `admin_info_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin_info_t` (
+  `id` char(32) NOT NULL COMMENT '主键，uuid',
+  `removed` char(1) NOT NULL DEFAULT 'N' COMMENT '是否移除',
+  `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_at` datetime DEFAULT NULL COMMENT '修改时间',
+  `login_name` varchar(128) NOT NULL COMMENT '登录名',
+  `password` varchar(128) NOT NULL COMMENT '登录密码',
+  `admin_name` varchar(128) DEFAULT NULL COMMENT '管理员姓名',
+  `product_id` char(32) NOT NULL COMMENT '产品编号',
+  `admin_url_param` varchar(32) DEFAULT NULL,
+  `admin_url_param_time_stamp` varchar(64) DEFAULT NULL,
+  `admin_key` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin_info_t`
+--
+
+LOCK TABLES `admin_info_t` WRITE;
+/*!40000 ALTER TABLE `admin_info_t` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin_info_t` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `appointment_t`
+--
+
+DROP TABLE IF EXISTS `appointment_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `appointment_t` (
+  `id` char(32) NOT NULL COMMENT '主键，uuid',
+  `user_id` char(32) NOT NULL COMMENT '用户id,外键到user_info_t',
+  `counselor_id` char(32) NOT NULL COMMENT '咨询师id,外键到counselor_info_t',
+  `removed` char(1) DEFAULT 'N' COMMENT '是否移除',
+  `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_at` datetime DEFAULT NULL COMMENT '修改时间',
+  `appointment_date` datetime DEFAULT NULL COMMENT '预约日期',
+  `overdue` char(1) DEFAULT 'N' COMMENT '是否过期',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `appointment_t`
+--
+
+LOCK TABLES `appointment_t` WRITE;
+/*!40000 ALTER TABLE `appointment_t` DISABLE KEYS */;
+/*!40000 ALTER TABLE `appointment_t` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `chat_msg_t`
+--
+
+DROP TABLE IF EXISTS `chat_msg_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `chat_msg_t` (
+  `id` char(32) NOT NULL COMMENT '主键，uuid',
+  `removed` char(1) NOT NULL DEFAULT 'N' COMMENT '是否移除',
+  `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_at` datetime DEFAULT NULL COMMENT '修改时间',
+  `user_id` char(32) NOT NULL COMMENT '用户id,外键到user_info_t',
+  `counselor_id` char(32) NOT NULL COMMENT '咨询师id,外键到counselor_info_t',
+  `msg_text` text COMMENT '聊天信息',
+  `consult_record_id` char(32) DEFAULT NULL COMMENT '咨询会话编号',
+  `system_msg` char(1) NOT NULL DEFAULT 'N' COMMENT '是否是系统消息',
+  `time_stamp` varchar(45) DEFAULT NULL COMMENT '时间戳',
+  `send_people_id` char(32) DEFAULT NULL COMMENT '发送消息的人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='聊天信息表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `chat_msg_t`
+--
+
+LOCK TABLES `chat_msg_t` WRITE;
+/*!40000 ALTER TABLE `chat_msg_t` DISABLE KEYS */;
+/*!40000 ALTER TABLE `chat_msg_t` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `consult_record_t`
+--
+
+DROP TABLE IF EXISTS `consult_record_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `consult_record_t` (
+  `id` char(32) NOT NULL COMMENT '主键，uuid',
+  `removed` char(1) NOT NULL DEFAULT 'N' COMMENT '是否移除',
+  `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_at` datetime DEFAULT NULL COMMENT '修改时间',
+  `user_id` char(32) NOT NULL COMMENT '用户id,外键到user_info_t',
+  `counselor_id` char(32) NOT NULL COMMENT '咨询师id,外键到counselor_info_t',
+  `begin_at` datetime DEFAULT NULL COMMENT '咨询开始时间',
+  `end_at` datetime DEFAULT NULL COMMENT '结束时间',
+  `consult_time` int(11) DEFAULT NULL COMMENT '咨询时常',
+  `end_people` char(32) DEFAULT NULL COMMENT '发起结束的人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='咨询记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `consult_record_t`
+--
+
+LOCK TABLES `consult_record_t` WRITE;
+/*!40000 ALTER TABLE `consult_record_t` DISABLE KEYS */;
+/*!40000 ALTER TABLE `consult_record_t` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `counselor_info_t`
+--
+
+DROP TABLE IF EXISTS `counselor_info_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `counselor_info_t` (
+  `id` char(32) NOT NULL COMMENT '主键，uuid',
+  `removed` char(1) NOT NULL DEFAULT 'N' COMMENT '是否移除',
+  `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_at` datetime DEFAULT NULL COMMENT '修改时间',
+  `login_name` varchar(128) NOT NULL COMMENT '登录名',
+  `password` varchar(128) NOT NULL COMMENT '登录密码',
+  `counselor_name` varchar(128) DEFAULT NULL COMMENT '咨询师的姓名',
+  `product_id` char(32) DEFAULT NULL,
+  `welcome_word` text COMMENT '咨询师设置的欢迎语',
+  `age` int(11) DEFAULT NULL COMMENT '年龄',
+  `sex` varchar(16) DEFAULT NULL COMMENT '性别',
+  `brief_introduction` text COMMENT '简介',
+  `head_img_id` char(32) DEFAULT NULL COMMENT '头像图片id,外键到img_data_t',
+  `appointment_max_num` int(11) DEFAULT '0' COMMENT '最大预约数',
+  `work_time_interval` varchar(128) DEFAULT NULL COMMENT '工作时段',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='咨询师表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `counselor_info_t`
+--
+
+LOCK TABLES `counselor_info_t` WRITE;
+/*!40000 ALTER TABLE `counselor_info_t` DISABLE KEYS */;
+/*!40000 ALTER TABLE `counselor_info_t` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `img_data_t`
+--
+
+DROP TABLE IF EXISTS `img_data_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `img_data_t` (
+  `id` char(32) NOT NULL COMMENT '主键uuid',
+  `img_data` longtext COMMENT '图片的base64数据',
+  `removed` char(1) NOT NULL DEFAULT 'N' COMMENT '是否移除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='图片，base64';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `img_data_t`
+--
+
+LOCK TABLES `img_data_t` WRITE;
+/*!40000 ALTER TABLE `img_data_t` DISABLE KEYS */;
+/*!40000 ALTER TABLE `img_data_t` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `message_counselor_t`
+--
+
+DROP TABLE IF EXISTS `message_counselor_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `message_counselor_t` (
+  `id` char(32) NOT NULL COMMENT '主键，uuid',
+  `user_id` char(32) NOT NULL COMMENT '用户id,外键到user_info_t',
+  `counselor_id` char(32) NOT NULL COMMENT '咨询师id,外键到counselor_info_t',
+  `removed` char(1) DEFAULT 'N' COMMENT '是否移除',
+  `create_at` datetime DEFAULT NULL,
+  `modify_at` datetime DEFAULT NULL COMMENT '修改时间',
+  `msg_user_id` char(32) DEFAULT NULL COMMENT '对应的message_user_t的id',
+  `message_text` text COMMENT '留言内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='留言记录表counselor';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `message_counselor_t`
+--
+
+LOCK TABLES `message_counselor_t` WRITE;
+/*!40000 ALTER TABLE `message_counselor_t` DISABLE KEYS */;
+/*!40000 ALTER TABLE `message_counselor_t` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `message_user_t`
+--
+
+DROP TABLE IF EXISTS `message_user_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `message_user_t` (
+  `id` char(32) NOT NULL COMMENT '主键，uuid',
+  `user_id` char(32) NOT NULL COMMENT '用户id,外键到user_info_t',
+  `counselor_id` char(32) NOT NULL COMMENT '咨询师id,外键到counselor_info_t',
+  `removed` char(1) DEFAULT 'N' COMMENT '是否移除',
+  `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_at` datetime DEFAULT NULL COMMENT '修改时间',
+  `msg_counselor_id` char(32) DEFAULT NULL COMMENT '对应的message_counselor_t的id',
+  `message_text` text COMMENT '留言内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='留言记录表user';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `message_user_t`
+--
+
+LOCK TABLES `message_user_t` WRITE;
+/*!40000 ALTER TABLE `message_user_t` DISABLE KEYS */;
+/*!40000 ALTER TABLE `message_user_t` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product_info_t`
+--
+
+DROP TABLE IF EXISTS `product_info_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product_info_t` (
+  `id` char(32) NOT NULL COMMENT '主键，uuid',
+  `removed` char(1) NOT NULL DEFAULT 'N' COMMENT '是否移除',
+  `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_at` datetime DEFAULT NULL COMMENT '修改时间',
+  `product_name` varchar(128) DEFAULT NULL COMMENT '产品名称',
+  `product_key` varchar(128) NOT NULL COMMENT '产品key',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='utf8_general_ci';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product_info_t`
+--
+
+LOCK TABLES `product_info_t` WRITE;
+/*!40000 ALTER TABLE `product_info_t` DISABLE KEYS */;
+INSERT INTO `product_info_t` VALUES ('f98e9c909bf311e68720290953283e14','N','2016-10-27 11:19:28','2016-10-27 11:19:35','测试01','123');
+/*!40000 ALTER TABLE `product_info_t` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_info_t`
+--
+
+DROP TABLE IF EXISTS `user_info_t`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_info_t` (
+  `id` char(32) NOT NULL COMMENT '主键，uuid',
+  `removed` char(1) NOT NULL DEFAULT 'N' COMMENT '是否移除',
+  `create_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `modify_at` datetime DEFAULT NULL COMMENT '修改时间',
+  `login_name` varchar(128) NOT NULL COMMENT '登录名',
+  `password` varchar(128) NOT NULL COMMENT '登录密码',
+  `product_id` char(32) NOT NULL COMMENT '所属产品id',
+  `user_name` varchar(128) DEFAULT NULL COMMENT '用户姓名',
+  `age` int(11) DEFAULT NULL COMMENT '年龄',
+  `sex` varchar(16) DEFAULT NULL COMMENT '性别',
+  `user_key` varchar(64) DEFAULT NULL COMMENT '其他平台接过来用户的唯一标识',
+  `user_url_param` varchar(32) DEFAULT NULL COMMENT '其他平台免登录地址参数',
+  `user_url_param_time_stamp` varchar(64) DEFAULT NULL COMMENT 'user_url_param跟新的时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_info_t`
+--
+
+LOCK TABLES `user_info_t` WRITE;
+/*!40000 ALTER TABLE `user_info_t` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_info_t` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2016-11-29 16:25:45
